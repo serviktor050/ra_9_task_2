@@ -5,7 +5,8 @@ import List from "../List/List.jsx";
 import CreatePostButton from "../CreatePostButton/CreatePostButton.jsx";
 import NewPostPage from "../Pages/NewPostPage.jsx";
 import usePostsFetch from "../hooks/usePostsFetch.jsx";
-//import PostPage from "../Pages/PostPage.jsx";
+import PostPage from "../Pages/PostPage.jsx";
+import EditPostPage from "../Pages/EditPostPage.jsx";
 
 export default function Crud() {
   const [posts, loading, error] = usePostsFetch(
@@ -19,7 +20,18 @@ export default function Crud() {
           <CreatePostButton />
         </Link>
         <Switch>
-          <Route path="/posts/new" component={NewPostPage} />
+          <Route
+            path="/posts/:id/edit"
+            render={(props) => <EditPostPage {...props} posts={posts} />}
+          />
+          <Route
+            path="/posts/new"
+            render={(props) => <NewPostPage {...props} />}
+          />
+          <Route
+            path="/posts/:id"
+            render={(props) => <PostPage {...props} posts={posts} />}
+          />
           <Route
             path="/"
             render={(props) => (

@@ -1,22 +1,28 @@
 import React from "react";
-import { useState } from "react";
 import { Link } from "react-router-dom";
+import { useState } from "react";
 
-const DEFAULT = {
-  content: "",
-};
+export default function EditPostPage(props) {
+  const { match, posts, history } = props;
+  const idFromMatch = match.url.substring(7);
+  const id = Number(idFromMatch.substring(0, idFromMatch.length - 5));
 
-export default function NewPostPage(props) {
-  const { history } = props;
+  const post = posts.find((post) => post.id === id);
+
+  const DEFAULT = {
+    id: post.id,
+    content: post.content,
+  };
+
   const [state, setState] = useState(DEFAULT);
 
-  const onNewPost = (post) => {
+  const onEditPost = (editedPost) => {
     fetch("https://ra-9-task-2-server.herokuapp.com/posts", {
       method: "POST",
       headers: {
         "Content-Type": "application/json;charset=utf-8",
       },
-      body: JSON.stringify(post),
+      body: JSON.stringify(editedPost),
     });
   };
 
@@ -33,28 +39,28 @@ export default function NewPostPage(props) {
   const onSubmit = (e) => {
     e.preventDefault();
     if (state.content !== "") {
-      const post = {
-        id: 0,
+      const editedPost = {
+        id: post.id,
         content: state.content,
       };
-      onNewPost(post);
-      history.push("/");
+      onEditPost(editedPost);
+      history.push(`/posts/${post.id}`);
     }
   };
 
   return (
-    <div className="new-post-form">
-      <Link to="/">
+    <div className="post-page">
+      <Link to={`/posts/${post.id}`}>
         <div className="material-icons clear">clear</div>
       </Link>
-      <h2>Добавить новый пост</h2>
+      <h2>Редактировать пост</h2>
       <textarea
         type="text"
         placeholder="Напишите о чем-нибудь..."
         onChange={onFormFieldChange}
         value={state.content}
       />
-      <input type="submit" value="Опубликовать" onClick={onSubmit} />
+      <input type="submit" value="Сохранить" onClick={onSubmit} />
     </div>
   );
 }
