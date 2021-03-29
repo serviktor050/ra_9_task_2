@@ -1,8 +1,8 @@
 import React from "react";
 import { useState, useEffect } from "react";
 
-export default function usePostsFetch(url) {
-  const [posts, setPosts] = useState([]);
+export default function usePostsFetch(url, initial) {
+  const [posts, setPosts] = useState(initial);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
